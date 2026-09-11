@@ -1,10 +1,19 @@
 const express = require('express');
 const app = express();
-const mongodb = require('./data/database');
+console.log("ESTOU EXECUTANDO ESTE SERVER.JS");
 
-const port = process.env.PORT || 3000;
+mongodb = require('./data/database');
+//app.get('/alice-test-123', (req, res) => {
+//    res.send('ESTE É O MEU SERVIDOR DO VS CODE');
+//})
+
+; const port = process.env.PORT || 3000;
 
 app.use('/', require('./routes'));
+
+//app.get('/teste', (req, res) => {
+//    res.send('O SERVIDOR ESTÁ FUNCIONANDO!');
+//});
 
 
 mongodb.initDB((err) => {
@@ -16,4 +25,5 @@ mongodb.initDB((err) => {
             console.log(`Database is listening and node Running on port ${port}`)
         });
     };
+
 });
