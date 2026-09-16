@@ -17,6 +17,7 @@ exports.create = (req, res) => {
     name: req.body.name,
     dedicated: req.body.dedicated,
     location: req.body.location,
+    additionalInfo: req.body.additionalInfo,
   });
   // Save Temple in the database
   temple
