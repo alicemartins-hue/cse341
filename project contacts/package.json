@@ -22,8 +22,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongodb": "^7.6.0",
-    "router": "^2.2.0"
+    "router": "^2.2.0",
+    "swagger-ui-express": "^5.0.1"
   },
-  "devDependencies": {},
   "keywords": []
 }

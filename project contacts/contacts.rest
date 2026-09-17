@@ -1,0 +1,96 @@
+### Contact 1
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Alice",
+    "lastName": "Martins",
+    "email": "alice@example.com",
+    "favoriteColor": "Purple",
+    "birthday": "2003-05-15"
+}
+
+### Contact 2
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Maria",
+    "lastName": "Silva",
+    "email": "maria@example.com",
+    "favoriteColor": "Blue",
+    "birthday": "1998-08-22"
+}
+
+### Contact 3
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john@example.com",
+    "favoriteColor": "Green",
+    "birthday": "1995-03-10"
+}
+
+### Contact 4
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Sofia",
+    "lastName": "Costa",
+    "email": "sofia@example.com",
+    "favoriteColor": "Red",
+    "birthday": "2001-11-30"
+}
+
+### Contact 5
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Daniel",
+    "lastName": "Oliveira",
+    "email": "daniel@example.com",
+    "favoriteColor": "Yellow",
+    "birthday": "1992-06-18"
+}
+
+### Get All Contacts
+GET http://localhost:3000/contacts
+
+### Get Contact by ID
+GET http://localhost:3000/contacts/6aac0114667c5eaacb57918e
+
+
+### Update Contact
+PUT http://localhost:3000/contacts/6aac0114667c5eaacb57918e
+Content-Type: application/json
+
+{
+    "firstName": "Alice",
+    "lastName": "Martins",
+    "email": "alice.martins@example.com",
+    "favoriteColor": "Purple",
+    "birthday": "2003-05-15"
+}
+
+### Check Updated Contact
+GET http://localhost:3000/contacts/6aac0114667c5eaacb57918e
+
+### Delete Contact
+DELETE http://localhost:3000/contacts/6aac0114667c5eaacb57918e
+
+### Get All Contacts
+GET http://localhost:3000/contacts
+
+
+### Test required fields
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Test"
+}

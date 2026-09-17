@@ -1,20 +1,17 @@
 const express = require('express');
 const app = express();
-console.log("ESTOU EXECUTANDO ESTE SERVER.JS");
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongodb = require('./data/database');
-//app.get('/alice-test-123', (req, res) => {
-//    res.send('ESTE É O MEU SERVIDOR DO VS CODE');
-//})
 
 ; const port = process.env.PORT || 3000;
 
 app.use('/', require('./routes'));
-
-//app.get('/teste', (req, res) => {
-//    res.send('O SERVIDOR ESTÁ FUNCIONANDO!');
-//});
-
 
 mongodb.initDB((err) => {
     if (err) {

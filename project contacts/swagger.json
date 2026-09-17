@@ -1,0 +1,205 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Contacts API",
+        "description": "API for managing contacts.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/contacts": {
+            "get": {
+                "summary": "Get all contacts",
+                "description": "Returns a list of all contacts.",
+                "responses": {
+                    "200": {
+                        "description": "A list of contacts.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contact"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a contact",
+                "description": "Creates a new contact. All fields are required.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Contact successfully created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "The ID of the newly created contact."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/{id}": {
+            "get": {
+                "summary": "Get a contact by ID",
+                "description": "Returns a single contact using its MongoDB ID.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/ContactId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contact found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contact"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a contact",
+                "description": "Updates the contact identified by the ID in the URL.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/ContactId"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Contact successfully updated."
+                    },
+                    "404": {
+                        "description": "Contact not found."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a contact",
+                "description": "Deletes the contact identified by the ID in the URL.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/ContactId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contact successfully deleted."
+                    },
+                    "404": {
+                        "description": "Contact not found."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "ContactId": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "description": "MongoDB ID of the contact.",
+                "schema": {
+                    "type": "string",
+                    "example": "68abc1234567890123456789"
+                }
+            }
+        },
+        "schemas": {
+            "ContactInput": {
+                "type": "object",
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "email",
+                    "favoriteColor",
+                    "birthday"
+                ],
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "example": "Alice"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "Martins"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "alice@example.com"
+                    },
+                    "favoriteColor": {
+                        "type": "string",
+                        "example": "Purple"
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2003-05-15"
+                    }
+                }
+            },
+            "Contact": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ContactInput"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "description": "MongoDB ID of the contact.",
+                                "example": "68abc1234567890123456789"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
