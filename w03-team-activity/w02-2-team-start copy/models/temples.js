@@ -3,11 +3,26 @@ module.exports = (mongoose) => {
     'temples',
     mongoose.Schema(
       {
-        temple_id: Number,
-        name: String,
-        location: String,
-        dedicated: String,
-        additionalInfo: Boolean,
+        temple_id: {
+          type: Number,
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        location: {
+          type: String,
+          required: true,
+        },
+        dedicated: {
+          type: String,
+          required: true,
+        },
+        additionalInfo: {
+          type: Boolean,
+          required: true,
+        },
       },
       { timestamps: true }
     )

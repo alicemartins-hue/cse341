@@ -4,39 +4,42 @@ const Temple = db.temples;
 const apiKey =
   'Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68Xwaj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N';
 
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.name) {
-    res.status(400).send({ message: 'Content can not be empty!' });
-    return;
-  }
-
-  // Create a Temple
-  const temple = new Temple({
-    temple_id: req.body.temple_id,
-    name: req.body.name,
-    dedicated: req.body.dedicated,
-    location: req.body.location,
-    additionalInfo: req.body.additionalInfo,
-  });
-  // Save Temple in the database
-  temple
-    .save(temple)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Temple.',
-      });
+exports.create = async (req, res) => {
+  try {
+    const temple = new Temple({
+      temple_id: req.body.temple_id,
+      name: req.body.name,
+      dedicated: req.body.dedicated,
+      location: req.body.location,
+      additionalInfo: req.body.additionalInfo,
     });
+
+    const data = await temple.save();
+
+    res.status(201).send(data);
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      return res.status(400).send({
+        message: 'Invalid temple data.',
+        errors: err.errors,
+      });
+    }
+
+    res.status(500).send({
+      message: err.message || 'Some error occurred while creating the Temple.',
+    });
+  }
 };
 
-exports.findAll = (req, res) => {
-  console.log(req.header('apiKey'));
-  if (req.header('apiKey') === apiKey) {
-    Temple.find(
+exports.findAll = async (req, res) => {
+  try {
+    if (req.header('apiKey') !== apiKey) {
+      return res.status(401).send({
+        message: 'Invalid apiKey, please read the documentation.',
+      });
+    }
+
+    const data = await Temple.find(
       {},
       {
         temple_id: 1,
@@ -46,40 +49,40 @@ exports.findAll = (req, res) => {
         additionalInfo: 1,
         _id: 0,
       }
-    )
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || 'Some error occurred while retrieving temples.',
-        });
-      });
-  } else {
-    res.send('Invalid apiKey, please read the documentation.');
+    );
+
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(500).send({
+      message:
+        err.message || 'Some error occurred while retrieving temples.',
+    });
   }
 };
 
-// Find a single Temple with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
   const temple_id = req.params.temple_id;
-  if (req.header('apiKey') === apiKey) {
-    Temple.find({ temple_id: temple_id })
-      .then((data) => {
-        if (!data)
-          res
-            .status(404)
-            .send({ message: 'Not found Temple with id ' + temple_id });
-        else res.send(data[0]);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: 'Error retrieving Temple with temple_id=' + temple_id,
-        });
+
+  try {
+    if (req.header('apiKey') !== apiKey) {
+      return res.status(401).send({
+        message: 'Invalid apiKey, please read the documentation.',
       });
-  } else {
-    res.send('Invalid apiKey, please read the documentation.');
+    }
+
+    const temple = await Temple.findOne({ temple_id: temple_id });
+
+    if (!temple) {
+      return res.status(404).send({
+        message: `Temple with temple_id=${temple_id} was not found.`,
+      });
+    }
+
+    res.status(200).send(temple);
+  } catch (err) {
+    res.status(500).send({
+      message: `Error retrieving Temple with temple_id=${temple_id}`,
+    });
   }
 };
 
@@ -88,6 +91,18 @@ exports.update = async (req, res) => {
   const temple_id = req.params.temple_id;
 
   try {
+    if (req.header('apiKey') !== apiKey) {
+      return res.status(401).send({
+        message: 'Invalid apiKey, please read the documentation.',
+      });
+    }
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).send({
+        message: 'Data to update can not be empty!',
+      });
+    }
+
     const temple = await Temple.findOneAndUpdate(
       { temple_id: temple_id },
       {
@@ -96,7 +111,10 @@ exports.update = async (req, res) => {
         dedicated: req.body.dedicated,
         additionalInfo: req.body.additionalInfo,
       },
-      { new: true }
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     if (!temple) {
@@ -105,8 +123,15 @@ exports.update = async (req, res) => {
       });
     }
 
-    res.send(temple);
+    res.status(200).send(temple);
   } catch (err) {
+    if (err.name === 'ValidationError') {
+      return res.status(400).send({
+        message: 'Invalid temple data.',
+        errors: err.errors,
+      });
+    }
+
     res.status(500).send({
       message: `Error updating Temple with temple_id=${temple_id}`,
     });
@@ -142,6 +167,12 @@ exports.delete = async (req, res) => {
   const temple_id = req.params.temple_id;
 
   try {
+    if (req.header('apiKey') !== apiKey) {
+      return res.status(401).send({
+        message: 'Invalid apiKey, please read the documentation.',
+      });
+    }
+
     const temple = await Temple.findOneAndDelete({
       temple_id: temple_id,
     });
@@ -152,7 +183,7 @@ exports.delete = async (req, res) => {
       });
     }
 
-    res.send({
+    res.status(200).send({
       message: 'Temple was deleted successfully.',
       temple: temple,
     });

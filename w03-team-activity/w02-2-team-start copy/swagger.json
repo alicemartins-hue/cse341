@@ -65,133 +65,155 @@
                                     }
                                 },
                                 "required": [
-                                    "name"
+                                    "temple_id",
+                                    "name",
+                                    "location",
+                                    "dedicated",
+                                    "additionalInfo"
                                 ]
                             }
                         }
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Temple created successfully"
                     },
                     "400": {
-                        "description": "Name is required"
+                        "description": "Invalid temple data"
                     },
                     "500": {
                         "description": "Error creating temple"
                     }
                 }
-            }
-        },
-        "/temples/{temple_id}": {
-            "get": {
-                "summary": "Get a temple by ID",
-                "description": "Returns a specific temple by its temple ID.",
-                "security": [
-                    {
-                        "apiKey": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "temple_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "The ID of the temple"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Temple found"
-                    },
-                    "404": {
-                        "description": "Temple not found"
-                    },
-                    "500": {
-                        "description": "Error retrieving temple"
-                    }
-                }
             },
-            "put": {
-                "summary": "Update a temple",
-                "description": "Updates an existing LDS temple by its temple ID.",
-                "parameters": [
-                    {
-                        "name": "temple_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "The ID of the temple"
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
+            "/temples/{temple_id}": {
+                "get": {
+                    "summary": "Get a temple by ID",
+                    "description": "Returns a specific temple by its temple ID.",
+                    "security": [
+                        {
+                            "apiKey": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "temple_id",
+                            "in": "path",
+                            "required": true,
                             "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "location": {
-                                        "type": "string"
-                                    },
-                                    "dedicated": {
-                                        "type": "string"
-                                    },
-                                    "additionalInfo": {
-                                        "type": "boolean"
+                                "type": "integer"
+                            },
+                            "description": "The ID of the temple"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Temple found"
+                        },
+                        "404": {
+                            "description": "Temple not found"
+                        },
+                        "500": {
+                            "description": "Error retrieving temple"
+                        }
+                    }
+                },
+                "put": {
+                    "summary": "Update a temple",
+                    "description": "Updates an existing LDS temple by its temple ID.",
+                    "security": [
+                        {
+                            "apiKey": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "temple_id",
+                            "in": "path",
+                            "required": true,
+                            "schema": {
+                                "type": "integer"
+                            },
+                            "description": "The ID of the temple"
+                        }
+                    ],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "dedicated": {
+                                            "type": "string"
+                                        },
+                                        "additionalInfo": {
+                                            "type": "boolean"
+                                        }
                                     }
                                 }
                             }
                         }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Temple updated successfully"
+                        },
+                        "400": {
+                            "description": "Invalid temple data"
+                        },
+                        "401": {
+                            "description": "Invalid apiKey"
+                        },
+                        "404": {
+                            "description": "Temple not found"
+                        },
+                        "500": {
+                            "description": "Error updating temple"
+                        }
                     }
                 },
-                "responses": {
-                    "200": {
-                        "description": "Temple updated successfully"
-                    },
-                    "404": {
-                        "description": "Temple not found"
-                    },
-                    "500": {
-                        "description": "Error updating temple"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Delete a temple",
-                "description": "Deletes an existing LDS temple by its temple ID.",
-                "parameters": [
-                    {
-                        "name": "temple_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                "delete": {
+                    "summary": "Delete a temple",
+                    "description": "Deletes an existing LDS temple by its temple ID.",
+                    "security": [
+                        {
+                            "apiKey": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "temple_id",
+                            "in": "path",
+                            "required": true,
+                            "schema": {
+                                "type": "integer"
+                            },
+                            "description": "The ID of the temple"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Temple deleted successfully"
                         },
-                        "description": "The ID of the temple"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Temple deleted successfully"
-                    },
-                    "404": {
-                        "description": "Temple not found"
-                    },
-                    "500": {
-                        "description": "Error deleting temple"
+                        "401": {
+                            "description": "Invalid apiKey"
+                        },
+                        "404": {
+                            "description": "Temple not found"
+                        },
+                        "500": {
+                            "description": "Error deleting temple"
+                        }
                     }
                 }
             }
         }
     }
-}
