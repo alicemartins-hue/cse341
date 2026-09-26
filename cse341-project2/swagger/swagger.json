@@ -1,0 +1,317 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Book Library API",
+        "description": "API for managing books and authors.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "paths": {
+        "/books": {
+            "get": {
+                "summary": "Get all books",
+                "responses": {
+                    "200": {
+                        "description": "Books retrieved successfully"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a book",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Book"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Book created successfully"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
+            "get": {
+                "summary": "Get a book by ID",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Book retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Book not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a book",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Book"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Book updated successfully"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Book not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a book",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Book deleted successfully"
+                    },
+                    "404": {
+                        "description": "Book not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/authors": {
+            "get": {
+                "summary": "Get all authors",
+                "responses": {
+                    "200": {
+                        "description": "Authors retrieved successfully"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create an author",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Author"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Author created successfully"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/authors/{id}": {
+            "get": {
+                "summary": "Get an author by ID",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Author retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Author not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update an author",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Author"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Author updated successfully"
+                    },
+                    "400": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Author not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete an author",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Author deleted successfully"
+                    },
+                    "404": {
+                        "description": "Author not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "id": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "description": "MongoDB ObjectId"
+            }
+        },
+        "schemas": {
+            "Book": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "author",
+                    "genre",
+                    "year",
+                    "pages",
+                    "rating",
+                    "status"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "The Hobbit"
+                    },
+                    "author": {
+                        "type": "string",
+                        "example": "J.R.R. Tolkien"
+                    },
+                    "genre": {
+                        "type": "string",
+                        "example": "Fantasy"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "example": 1937
+                    },
+                    "pages": {
+                        "type": "integer",
+                        "example": 310
+                    },
+                    "rating": {
+                        "type": "number",
+                        "example": 4.8
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Read"
+                    }
+                }
+            },
+            "Author": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "birthYear",
+                    "nationality",
+                    "booksCount"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "J.R.R. Tolkien"
+                    },
+                    "birthYear": {
+                        "type": "integer",
+                        "example": 1892
+                    },
+                    "nationality": {
+                        "type": "string",
+                        "example": "British"
+                    },
+                    "booksCount": {
+                        "type": "integer",
+                        "example": 20
+                    }
+                }
+            }
+        }
+    }
+}
