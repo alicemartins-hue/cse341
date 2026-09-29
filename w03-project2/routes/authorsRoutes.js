@@ -10,10 +10,12 @@ const {
     deleteAuthor
 } = require("../controllers/authorsController");
 
+const isAuthenticated = require("../middleware/authMiddleware");
+
 router.get("/", getAllAuthors);
 router.get("/:id", getAuthorById);
-router.post("/", createAuthor);
-router.put("/:id", updateAuthor);
-router.delete("/:id", deleteAuthor);
+router.post("/", isAuthenticated, createAuthor);
+router.put("/:id", isAuthenticated, updateAuthor);
+router.delete("/:id", isAuthenticated, deleteAuthor);
 
 module.exports = router;
