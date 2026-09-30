@@ -50,6 +50,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+    console.log("SERIALIZE USER:", user._id);
     done(null, user._id);
 });
 
