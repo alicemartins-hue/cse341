@@ -16,14 +16,20 @@ router.get(
         failureRedirect: "/"
     }),
     (req, res, next) => {
+        console.log("SESSION BEFORE SAVE:", req.session);
+
         req.session.save((err) => {
             if (err) {
+                console.error("SESSION SAVE ERROR:", err);
                 return next(err);
             }
 
+            console.log("SESSION AFTER SAVE:", req.session);
+
             res.json({
                 message: "Authentication successful",
-                user: req.user
+                user: req.user,
+                session: req.session
             });
         });
     }
