@@ -15,10 +15,16 @@ router.get(
     passport.authenticate("github", {
         failureRedirect: "/"
     }),
-    (req, res) => {
-        res.json({
-            message: "Authentication successful",
-            user: req.user
+    (req, res, next) => {
+        req.session.save((err) => {
+            if (err) {
+                return next(err);
+            }
+
+            res.json({
+                message: "Authentication successful",
+                user: req.user
+            });
         });
     }
 );
