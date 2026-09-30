@@ -16,7 +16,10 @@ router.get(
         failureRedirect: "/"
     }),
     (req, res) => {
-        res.redirect("/");
+        res.json({
+            message: "Authentication successful",
+            user: req.user
+        });
     }
 );
 
