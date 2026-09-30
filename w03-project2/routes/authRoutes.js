@@ -39,4 +39,11 @@ router.get("/logout", (req, res, next) => {
     });
 });
 
+router.get("/status", (req, res) => {
+    res.json({
+        authenticated: req.isAuthenticated(),
+        user: req.user || null
+    });
+});
+
 module.exports = router;
