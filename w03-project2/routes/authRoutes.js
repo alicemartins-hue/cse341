@@ -52,4 +52,14 @@ router.get("/status", (req, res) => {
     });
 });
 
+router.get("/debug-session", (req, res) => {
+    res.json({
+        sessionID: req.sessionID,
+        session: req.session,
+        authenticated: req.isAuthenticated(),
+        user: req.user || null,
+        cookies: req.headers.cookie || null
+    });
+});
+
 module.exports = router;
