@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const session = require("express-session");
 const passport = require("./config/passport"); 
+const MongoStore = require("connect-mongo");
 
 const { initDb } = require("./db/database");
 const booksRoutes = require("./routes/booksRoutes");
@@ -25,6 +26,10 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGODB_URI,
+            collectionName: "sessions"
+        }),
         cookie: {
             secure: true,
             httpOnly: true,
