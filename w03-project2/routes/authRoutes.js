@@ -12,26 +12,47 @@ router.get(
 
 router.get(
     "/github/callback",
-    passport.authenticate("github", {
-        failureRedirect: "/"
-    }),
     (req, res, next) => {
-        console.log("SESSION BEFORE SAVE:", req.session);
+        passport.authenticate("github", (err, user, info) => {
+            console.log("GITHUB CALLBACK ERROR:", err);
+            console.log("GITHUB CALLBACK USER:", user);
+            console.log("GITHUB CALLBACK INFO:", info);
 
-        req.session.save((err) => {
             if (err) {
-                console.error("SESSION SAVE ERROR:", err);
                 return next(err);
             }
 
-            console.log("SESSION AFTER SAVE:", req.session);
+            if (!user) {
+                return res.status(401).json({
+                    message: "GitHub authentication failed",
+                    info: info || null
+                });
+            }
 
-            res.json({
-                message: "Authentication successful",
-                user: req.user,
-                session: req.session
+            req.logIn(user, (err) => {
+                if (err) {
+                    console.error("LOGIN ERROR:", err);
+                    return next(err);
+                }
+
+                console.log("SESSION BEFORE SAVE:", req.session);
+
+                req.session.save((err) => {
+                    if (err) {
+                        console.error("SESSION SAVE ERROR:", err);
+                        return next(err);
+                    }
+
+                    console.log("SESSION AFTER SAVE:", req.session);
+
+                    res.json({
+                        message: "Authentication successful",
+                        user: req.user,
+                        session: req.session
+                    });
+                });
             });
-        });
+        })(req, res, next);
     }
 );
 
