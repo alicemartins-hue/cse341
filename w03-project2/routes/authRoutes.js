@@ -13,6 +13,8 @@ router.get(
 router.get(
     "/github/callback",
     (req, res, next) => {
+        console.log("=== GITHUB CALLBACK REACHED ===");
+
         passport.authenticate("github", (err, user, info) => {
             console.log("GITHUB CALLBACK ERROR:", err);
             console.log("GITHUB CALLBACK USER:", user);
