@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GitHubStrategy = require("passport-github2").Strategy;
+const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../db/database");
 
 passport.use(
@@ -51,7 +52,8 @@ passport.use(
 
 passport.serializeUser((user, done) => {
     console.log("SERIALIZE USER:", user._id);
-    done(null, user._id);
+
+    done(null, user._id.toString());
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -61,7 +63,11 @@ passport.deserializeUser(async (id, done) => {
         const db = getDatabase();
         const users = db.collection("users");
 
-        const user = await users.findOne({ _id: id });
+        const objectId = new ObjectId(id);
+
+        const user = await users.findOne({
+            _id: objectId
+        });
 
         console.log("USER FOUND:", user);
 
