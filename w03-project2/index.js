@@ -4,9 +4,10 @@ require("dotenv").config();
 
 const session = require("express-session");
 const passport = require("./config/passport");
-const MongoStore = require("connect-mongo").default;
+const connectMongo = require("connect-mongo");
+const MongoStore = connectMongo.default || connectMongo;
 
-const { initDb } = require("./db/database");
+const { initDb, getMongoClient } = require("./db/database");
 
 const booksRoutes = require("./routes/booksRoutes");
 const authorsRoutes = require("./routes/authorsRoutes");
@@ -31,7 +32,8 @@ app.use(
         saveUninitialized: false,
 
         store: MongoStore.create({
-            mongoUrl: process.env.MONGODB_URI,
+            clientPromise: getMongoClient().connect(),
+            dbName: "book_library",
             collectionName: "sessions"
         }),
 

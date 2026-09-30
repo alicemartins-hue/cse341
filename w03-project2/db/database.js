@@ -10,10 +10,13 @@ let database;
 async function initDb() {
     try {
         await client.connect();
+
         database = client.db("book_library");
+
         console.log("Connected to MongoDB");
     } catch (error) {
         console.error("MongoDB connection error:", error);
+        throw error;
     }
 }
 
@@ -21,7 +24,12 @@ function getDatabase() {
     return database;
 }
 
+function getMongoClient() {
+    return client;
+}
+
 module.exports = {
     initDb,
-    getDatabase
+    getDatabase,
+    getMongoClient
 };
